@@ -1,0 +1,17 @@
+import Feed from "./components/Feed";
+import Marketplace from "./components/Marketplace";
+import MusicSection from "./components/MusicSection";
+import Wallet from "./components/Wallet";
+import ProfileView from "./components/ProfileView";
+
+
+
+
+import Feed from "./Feed";
+import Marketplace from "./Marketplace";
+import MusicSection from "./MusicSection";
+import Wallet from "./Wallet";
+import ProfileView from "./ProfileView";
+
+
+Corrigir imports para build no Netlify
