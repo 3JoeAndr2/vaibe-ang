@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Home, MessageCircle, Music, Play, ShoppingBag, 
@@ -8,14 +9,14 @@ import {
 } from 'lucide-react';
 import { TabType, UserProfile, FeatureFlags } from './types';
 import { COLORS, NEWS_TICKER } from './constants';
-import Feed from './Feed';
-import Wallet from './Wallet';
-import MusicSection from './MusicSection';
-import AdminDashboard from './AdminDashboard';
-import ProfileView from './ProfileView';
-import Marketplace from './Marketplace';
-import VaibeBot from './VaibeBot';
-import OwnerPanel from './OwnerPanel';
+import Feed from './components/Feed';
+import Wallet from './components/Wallet';
+import MusicSection from './components/MusicSection';
+import AdminDashboard from './components/AdminDashboard';
+import ProfileView from './components/ProfileView';
+import Marketplace from './components/Marketplace';
+import VaibeBot from './components/VaibeBot';
+import OwnerPanel from './components/OwnerPanel';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('feed');
@@ -69,7 +70,7 @@ const App: React.FC = () => {
 
   // Check if current tab is locked by owner
   const isTabLocked = (tab: string) => {
-    if (tab === 'profile' || tab === 'admin' || tab === 'settings' || tab === 'owner_panel') return false;
+    if (['profile', 'admin', 'settings', 'owner_panel'].includes(tab)) return false;
     return !features[tab as keyof FeatureFlags];
   };
 
@@ -99,8 +100,8 @@ const App: React.FC = () => {
           <p className="text-zinc-500 max-w-md mb-8">Esta ferramenta faz agora parte do VaibeAngo Premium. Para continuar a usar, efectua o pagamento via IBAN abaixo:</p>
           
           <div className="bg-black/40 p-6 rounded-3xl border border-white/10 mb-8 w-full max-w-md">
-            <p className="text-[10px] text-zinc-500 uppercase font-bold mb-2">IBAN para Ativação</p>
-            <p className="text-lg font-mono text-white tracking-wider break-all">{ownerIban}</p>
+            <p className="text-[10px] text-zinc-500 uppercase font-bold mb-2 text-center">IBAN para Ativação</p>
+            <p className="text-lg font-mono text-white tracking-wider break-all text-center">{ownerIban}</p>
           </div>
 
           <button className="px-10 py-4 bg-gradient-to-r from-[#ff2d87] to-[#ff3b3b] rounded-full font-bold shadow-xl shadow-pink-500/20 hover:scale-105 active:scale-95 transition-all">
@@ -122,25 +123,25 @@ const App: React.FC = () => {
           <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6">
              <Plus size={32} className="text-[#ff2d87]" />
           </div>
-          <h2 className="text-2xl font-bold mb-2">Módulo {activeTab}</h2>
-          <p className="text-zinc-500 max-w-md">Em desenvolvimento para a versão 1.1.</p>
+          <h2 className="text-2xl font-bold mb-2">Módulo {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h2>
+          <p className="text-zinc-500 max-w-md">Em desenvolvimento para a próxima atualização. Fica atento!</p>
         </div>
       );
     }
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-[#0f0f12] text-[#f6f6f8]">
+    <div className="flex h-screen w-full flex-col bg-[#0f0f12] text-[#f6f6f8] overflow-hidden">
       {/* Real-time News Ticker */}
-      <div className="h-8 bg-black/40 border-b border-white/5 flex items-center overflow-hidden">
+      <div className="h-8 bg-black/40 border-b border-white/5 flex items-center overflow-hidden flex-shrink-0">
         <div className="flex animate-marquee whitespace-nowrap gap-12 px-4">
           {NEWS_TICKER.map((news, i) => (
-            <span key={i} className="text-xs font-medium text-[#ff2d87]">
+            <span key={i} className="text-[10px] uppercase tracking-widest font-bold text-[#ff2d87]">
               {news}
             </span>
           ))}
           {NEWS_TICKER.map((news, i) => (
-            <span key={`dup-${i}`} className="text-xs font-medium text-[#ff2d87]">
+            <span key={`dup-${i}`} className="text-[10px] uppercase tracking-widest font-bold text-[#ff2d87]">
               {news}
             </span>
           ))}
@@ -148,7 +149,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Top Header */}
-      <header className="h-16 flex items-center px-4 gap-4 bg-black/20 border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl">
+      <header className="h-16 flex items-center px-4 gap-4 bg-black/20 border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl flex-shrink-0">
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="p-2 hover:bg-white/5 rounded-lg lg:hidden"
@@ -171,7 +172,7 @@ const App: React.FC = () => {
           <input 
             type="text" 
             placeholder="Pesquisar pessoas, serviços, músicas..."
-            className="w-full h-10 pl-12 pr-4 bg-white/5 border border-white/10 rounded-full focus:outline-none focus:border-[#ff2d87]/50 focus:ring-1 focus:ring-[#ff2d87]/50 transition-all"
+            className="w-full h-10 pl-12 pr-4 bg-white/5 border border-white/10 rounded-full focus:outline-none focus:border-[#ff2d87]/50 focus:ring-1 focus:ring-[#ff2d87]/50 transition-all text-sm"
           />
         </div>
 
@@ -182,11 +183,12 @@ const App: React.FC = () => {
               if (key === "vaibe123") {
                 setIsOwnerMode(true);
                 setActiveTab('owner_panel');
-              } else {
+              } else if (key !== null) {
                 alert("Acesso Negado.");
               }
             }}
             className="p-2.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 hover:bg-yellow-500 hover:text-black transition-all"
+            title="Acesso Admin"
           >
             <Key size={18} />
           </button>
@@ -213,7 +215,7 @@ const App: React.FC = () => {
           transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
-          <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+          <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1 no-scrollbar">
             {sidebarItems.map((item) => (
               <button
                 key={item.id}
@@ -251,7 +253,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="p-4 border-t border-white/5 bg-black/20">
-            <div className="bg-gradient-to-br from-zinc-900 to-black p-4 rounded-2xl border border-white/5 relative overflow-hidden group cursor-pointer">
+            <div className="bg-gradient-to-br from-zinc-900 to-black p-4 rounded-2xl border border-white/5 relative overflow-hidden group cursor-pointer mb-4">
               <div className="absolute top-0 right-0 p-2 text-[10px] font-bold text-yellow-500">VIP</div>
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-2 rounded-lg bg-yellow-500/10 text-yellow-500">
@@ -267,9 +269,9 @@ const App: React.FC = () => {
               </div>
             </div>
             
-            <div className="mt-4 grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <div className="bg-white/5 p-2 rounded-lg text-center">
-                <p className="text-[10px] text-zinc-500 uppercase font-bold mb-1">Vaibe Coins</p>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold mb-1">Coins</p>
                 <div className="flex items-center justify-center gap-1 text-[#ff2d87] font-bold">
                   <Coins size={12} />
                   <span>{user.vaibeCoins}</span>
@@ -277,7 +279,7 @@ const App: React.FC = () => {
               </div>
               <div className="bg-white/5 p-2 rounded-lg text-center">
                 <p className="text-[10px] text-zinc-500 uppercase font-bold mb-1">Kwanza</p>
-                <div className="text-green-500 font-bold">
+                <div className="text-green-500 font-bold text-xs">
                   {user.kwanzaBalance.toLocaleString()}
                 </div>
               </div>
@@ -290,36 +292,77 @@ const App: React.FC = () => {
           </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto bg-black/10">
-          <div className="max-w-7xl mx-auto p-4 lg:p-6">
-            {renderContent()}
-          </div>
-        </main>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden relative">
+          <main className="flex-1 overflow-y-auto bg-black/10 no-scrollbar">
+            <div className="max-w-7xl mx-auto p-4 lg:p-6 pb-24 lg:pb-6">
+              {renderContent()}
+            </div>
+          </main>
+          
+          {/* Mobile Tab Bar */}
+          <nav className="lg:hidden h-16 bg-black/80 backdrop-blur-xl border-t border-white/10 flex items-center justify-around px-4 sticky bottom-0 z-50">
+             <button onClick={() => setActiveTab('feed')} className={`p-2 ${activeTab === 'feed' ? 'text-[#ff2d87]' : 'text-zinc-500'}`}><Home size={24} /></button>
+             <button onClick={() => setActiveTab('music')} className={`p-2 ${activeTab === 'music' ? 'text-[#ff2d87]' : 'text-zinc-500'}`}><Music size={24} /></button>
+             <button onClick={() => setActiveTab('vaibepay')} className={`p-2 ${activeTab === 'vaibepay' ? 'text-[#ff2d87]' : 'text-zinc-500'}`}><CreditCard size={24} /></button>
+             <button onClick={() => setActiveTab('market')} className={`p-2 ${activeTab === 'market' ? 'text-[#ff2d87]' : 'text-zinc-500'}`}><ShoppingBag size={24} /></button>
+             <button onClick={() => setActiveTab('profile')} className={`p-2 ${activeTab === 'profile' ? 'text-[#ff2d87]' : 'text-zinc-500'}`}><User size={24} /></button>
+          </nav>
+        </div>
 
-        {/* Right Sidebar */}
+        {/* Right Sidebar - Widgets */}
         <aside className="hidden xl:flex w-80 bg-black/40 border-l border-white/5 flex-col p-6 space-y-6 overflow-y-auto">
-          {/* VaibeBot AI */}
-          <section className="bg-gradient-to-br from-zinc-900 to-black rounded-2xl border border-white/10 p-4">
-             <div className="flex items-center gap-3 mb-4">
-               <div className="w-10 h-10 rounded-full bg-[#8e5efc]/20 flex items-center justify-center">
-                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#8e5efc] to-[#ff2d87] animate-pulse"></div>
-               </div>
-               <div>
-                 <h3 className="text-sm font-bold">VaibeBot AI</h3>
-                 <p className="text-[10px] text-zinc-500">Assistente 24/7</p>
-               </div>
-             </div>
-             <p className="text-xs text-zinc-400 mb-4 italic">"Olá Joel! Como posso ajudar na tua monetização hoje?"</p>
-             <button className="w-full py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-bold hover:bg-white/10 transition-colors">Conversar</button>
-          </section>
+          {/* VaibeBot AI Widget */}
+          <VaibeBot />
 
           {/* Quick Services */}
           <section className="space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">Serviços Rápidos</h3>
             <div className="grid grid-cols-2 gap-2">
-              <button className="p-3 bg-white/5 rounded-xl text-center hover:bg-white/10 transition-colors">
+              <button onClick={() => setActiveTab('vaibepay')} className="p-3 bg-white/5 rounded-xl text-center hover:bg-white/10 transition-all border border-white/5">
                  <MapPin size={20} className="mx-auto mb-2 text-[#ff2d87]" />
-                 <span className="text-[10px] font-bold">Localização</span>
+                 <span className="text-[10px] font-bold">Localizar ATM</span>
               </button>
-              <button class
+              <button onClick={() => setActiveTab('jobs')} className="p-3 bg-white/5 rounded-xl text-center hover:bg-white/10 transition-all border border-white/5">
+                 <Briefcase size={20} className="mx-auto mb-2 text-[#8e5efc]" />
+                 <span className="text-[10px] font-bold">Vagas Hoje</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Trending Communities */}
+          <section className="space-y-4">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">Comunidades</h3>
+            <div className="space-y-3">
+              {['Kuduro Lovers', 'Angola Tech Hub', 'Kizomba Fest'].map((comm, i) => (
+                <div key={i} className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-xl cursor-pointer group">
+                  <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center font-black group-hover:bg-[#ff2d87]/20 group-hover:text-[#ff2d87] transition-all">
+                    {comm.charAt(0)}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold">{comm}</p>
+                    <p className="text-[10px] text-zinc-500">{Math.floor(Math.random() * 5000)} membros</p>
+                  </div>
+                  <button className="text-xs font-bold text-[#ff2d87]">Entrar</button>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Footer Info */}
+          <footer className="pt-6 border-t border-white/5">
+            <div className="flex flex-wrap gap-4 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
+              <a href="#" className="hover:text-zinc-400">Privacidade</a>
+              <a href="#" className="hover:text-zinc-400">Termos</a>
+              <a href="#" className="hover:text-zinc-400">Ajuda</a>
+              <a href="#" className="hover:text-zinc-400">Publicidade</a>
+            </div>
+            <p className="mt-4 text-[8px] text-zinc-700 font-black uppercase">© 2024 VaibeAngo. Criado para o Futuro de Angola.</p>
+          </footer>
+        </aside>
+      </div>
+    </div>
+  );
+};
+
+export default App;
