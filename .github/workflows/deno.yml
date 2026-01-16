@@ -1,42 +1,120 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+import React from "react";
 
-# This workflow will install Deno then run `deno lint` and `deno test`.
-# For more information see: https://github.com/denoland/setup-deno
+// ===== Icones =====
+import { 
+  Heart as _Heart, MessageCircle as _MessageCircle, Share2 as _Share2, Star as _Star,
+  MoreHorizontal as _MoreHorizontal, Image as ImageIcon, Video, Music, MapPin as _MapPin,
+  Smile as _Smile, Plus, Link, FileText,
+  Play, SkipBack, SkipForward, Repeat as _Repeat, Shuffle as _Shuffle, Search as _Search, MoreVertical as _MoreVertical, Mic2, ChevronDown,
+  ShoppingCart, Tag as _Tag, Filter as _Filter,
+  ShieldCheck, Layout, Users as _Users, DollarSign as _DollarSign, Key as _Key,
+  ToggleLeft, ToggleRight, Save as _Save, Trash2 as _Trash2, Lightbulb, Activity, Award as _Award, TrendingUp, CreditCard, Globe as _Globe, Zap, Lock, Sparkles,
+  ArrowUpRight, ArrowDownLeft as _ArrowDownLeft, QrCode, Smartphone, Wifi as _Wifi, Tv as _Tv, Landmark
+} from "lucide-react";
 
-name: Deno
+// ===== Estilos globais =====
+import "./index.css";
 
-on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+// ===== Componentes =====
 
-permissions:
-  contents: read
+// Feed
+function Feed() {
+  return (
+    <div className="feed">
+      <h2>Feed</h2>
+      <div className="post">
+        <ImageIcon size={40} />
+        <p>Bem-vindo ao Vaibe Ango!</p>
+        <button className="like-button">Like</button>
+      </div>
+    </div>
+  );
+}
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
+// MusicSection
+function MusicSection() {
+  return (
+    <div className="music-section">
+      <h2>Música</h2>
+      <div className="player">
+        <button><SkipBack /></button>
+        <button><Play /></button>
+        <button><SkipForward /></button>
+      </div>
+    </div>
+  );
+}
 
-    steps:
-      - name: Setup repo
-        uses: actions/checkout@v4
+// Marketplace
+function Marketplace() {
+  return (
+    <div className="marketplace">
+      <h2>Marketplace</h2>
+      <button className="add-item"><Plus /> Adicionar</button>
+    </div>
+  );
+}
 
-      - name: Setup Deno
-        # uses: denoland/setup-deno@v1
-        uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31  # v1.1.2
-        with:
-          deno-version: v1.x
+// OwnerPanel
+function OwnerPanel() {
+  return (
+    <div className="owner-panel">
+      <h2>Painel do Dono</h2>
+      <button><ToggleLeft /> Alternar</button>
+      <button><ToggleRight /> Alternar</button>
+    </div>
+  );
+}
 
-      # Uncomment this step to verify the use of 'deno fmt' on each commit.
-      # - name: Verify formatting
-      #   run: deno fmt --check
+// Wallet
+function Wallet() {
+  return (
+    <div className="wallet">
+      <h2>Carteira</h2>
+      <button><CreditCard /> Pagamento</button>
+      <button><QrCode /> QR Code</button>
+    </div>
+  );
+}
 
-      - name: Run linter
-        run: deno lint
+// AdminDashboard
+function AdminDashboard() {
+  return (
+    <div className="admin-dashboard">
+      <h2>Admin Dashboard</h2>
+      <p>Estatísticas em breve</p>
+    </div>
+  );
+}
 
-      - name: Run tests
-        run: deno test -A
+// ===== App Principal =====
+export default function App() {
+  return (
+    <div className="app-container">
+      <header>
+        <h1>Vaibe Ango</h1>
+      </header>
+
+      <main>
+        <section className="left-sidebar">
+          <OwnerPanel />
+          <Wallet />
+        </section>
+
+        <section className="center-content">
+          <Feed />
+          <MusicSection />
+          <Marketplace />
+        </section>
+
+        <section className="right-sidebar">
+          <AdminDashboard />
+        </section>
+      </main>
+
+      <footer>
+        <p>© 2026 Vaibe Ango</p>
+      </footer>
+    </div>
+  );
+}
