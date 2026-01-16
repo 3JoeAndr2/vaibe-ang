@@ -1,0 +1,10 @@
+
+{
+  "name": "VaibeAngo Futuro 1.1",
+  "description": "A high-performance Angolan super-app integrating social media, digital wallet (VaibePay), music (VaibeMusic), marketplace, and AI-powered services.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
